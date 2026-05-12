@@ -23,8 +23,7 @@ pipeline {
         stage('Test Backend') {
             steps {
                 dir('A2/todo-app/backend') {
-                    bat 'npm install'
-                    bat 'npm test -- --reporters jest-junit'
+                    bat 'npm test'
                 }
             }
             post {
