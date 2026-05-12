@@ -44,6 +44,7 @@ pipeline {
             steps {
                 dir('A2/todo-app/frontend') {
                     bat 'npm run build'
+                    bat 'set CI=false && npm run build'
                 }
             }
         }
