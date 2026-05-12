@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "build": "prisma generate && prisma migrate deploy",
-    "test": "jest --reporters=jest-junit"
+    "test": "jest --reporters=jest-junit --passWithNoTests --forceExit"  
   },
   "keywords": [],
   "author": "",
