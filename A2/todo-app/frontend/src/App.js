@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import './App.css';
 
 function App() {
@@ -7,7 +7,7 @@ function App() {
   const [error, setError] = useState("");
   const API = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
-  const fetchTasks = async () => {
+  const fetchTasks = useCallback(async () => {
     try {
       const res = await fetch(`${API}/tasks`);
       if (!res.ok) throw new Error("Failed to fetch");
@@ -19,7 +19,7 @@ function App() {
       setError("Could not connect to server.");
       setTasks([]);
     }
-  };
+  }, [API]);
 
   const addTask = async (e) => {
     e.preventDefault();
@@ -74,7 +74,7 @@ function App() {
     }
   };
 
-  useEffect(() => { fetchTasks(); }, []);
+  useEffect(() => { fetchTasks(); }, [fetchTasks]);
 
   const doneCount = tasks.filter(t => t.completed).length;
   const pendingCount = tasks.length - doneCount;
