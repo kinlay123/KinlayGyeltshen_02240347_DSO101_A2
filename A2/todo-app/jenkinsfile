@@ -51,18 +51,15 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    docker.build('kinlay2005/fe-todo:02240347').push()
                     docker.withRegistry(
                         'https://registry.hub.docker.com',
                         'docker-hub-creds'
                     ) {
-                        docker.image('kinlay2005/fe-todo:02240347').push()
+                        docker.build('kinlay2005/fe-todo:02240347').push()
                     }
                 }
             }
         }
-    }
-}
     }
     post {
         success {
