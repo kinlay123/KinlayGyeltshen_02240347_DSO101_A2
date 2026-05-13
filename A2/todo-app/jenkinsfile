@@ -1,7 +1,7 @@
 pipeline {
     agent any
     tools {
-        nodejs 'NodeJs'
+        nodejs 'NodeJS'
     }
     environment {
         DOCKERHUB_USER = 'kinlay2005'
@@ -15,48 +15,47 @@ pipeline {
         }
         stage('Install Backend') {
             steps {
-                dir('A2/todo-app/backend') {
-                    bat 'npm install'
+                dir('todo-app/backend') {
+                    sh 'npm install'
                 }
             }
         }
         stage('Test Backend') {
             steps {
-                dir('A2/todo-app/backend') {
-                    bat 'npm test || exit 0'
+                dir('todo-app/backend') {
+                    sh 'npm install'
+                    sh 'npm test -- --reporters jest-junit'
                 }
             }
             post {
                 always {
                     junit allowEmptyResults: true,
-                          testResults: 'A2/todo-app/backend/junit.xml'
+                          testResults: 'todo-app/backend/junit.xml'
                 }
             }
         }
         stage('Install Frontend') {
             steps {
-                dir('A2/todo-app/frontend') {
-                    bat 'npm install'
+                dir('todo-app/frontend') {
+                    sh 'npm install'
                 }
             }
         }
         stage('Build Frontend') {
             steps {
-                dir('A2/todo-app/frontend') {
-                    bat 'set CI=false && npm run build'
+                dir('todo-app/frontend') {
+                    sh 'npm run build'
                 }
             }
         }
         stage('Deploy') {
-    steps {
-        script {
-            docker.withRegistry(
-                'https://registry.hub.docker.com',
-                'Docker-hub-creds'
-            ) {
-                docker.build('kinlay2005/fe-todo:02240347', 'A2/todo-app').push()
-                docker.build('kinlay2005/fe-todo:02240347', 'A2/todo-app/frontend').push()
-                docker.build('kinlay2005/be-todo:02240347', 'A2/todo-app/backend').push()
+            steps {
+                script {
+                    docker.withRegistry(
+                        'https://registry.hub.docker.com',
+                        'docker-hub-creds'
+                    ) {
+                        docker.build('kinlay2005/fe-todo:02240347', 'A2/todo-app/frontend').push()
                     }
                 }
             }
