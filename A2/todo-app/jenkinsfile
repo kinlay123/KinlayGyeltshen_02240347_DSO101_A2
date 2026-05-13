@@ -43,19 +43,20 @@ pipeline {
         stage('Build Frontend') {
             steps {
                 dir('A2/todo-app/frontend') {
-                    bat 'npm run build'
                     bat 'set CI=false && npm run build'
                 }
             }
         }
         stage('Deploy') {
-            steps {
-                script {
-                    docker.withRegistry(
-                        'https://registry.hub.docker.com',
-                        'Docker-hub-creds'
-                    ) {
-                        docker.build('kinlay2005/fe-todo:02240347').push()
+    steps {
+        script {
+            docker.withRegistry(
+                'https://registry.hub.docker.com',
+                'Docker-hub-creds'
+            ) {
+                docker.build('kinlay2005/fe-todo:02240347', 'A2/todo-app').push()
+                docker.build('kinlay2005/fe-todo:02240347', 'A2/todo-app/frontend').push()
+                docker.build('kinlay2005/be-todo:02240347', 'A2/todo-app/backend').push()
                     }
                 }
             }
