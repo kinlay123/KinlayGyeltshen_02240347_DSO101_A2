@@ -54,7 +54,7 @@ pipeline {
                         'https://registry.hub.docker.com',
                         'Docker-hub-creds'
                     ) {
-                        docker.build('kinlay2005/fe-todo:02240347').push()
+                        docker build -t "kinlay2005/fe-todo:02240347" A2/todo-app/frontend
                     }
                 }
             }
