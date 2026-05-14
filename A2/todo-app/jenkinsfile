@@ -43,18 +43,16 @@ pipeline {
         stage('Build Frontend') {
             steps {
                 dir('A2/todo-app/frontend') {
-                    bat 'npm run build'
+                    bat 'set CI=false && npm run build'
                 }
             }
         }
         stage('Deploy') {
             steps {
                 script {
-                    docker.withRegistry(
-                        'https://registry.hub.docker.com',
-                        'Docker-hub-creds'
-                    ) {
-                        docker build -t "kinlay2005/fe-todo:02240347" A2/todo-app/frontend
+                    def image = docker.build("kinlay2005/fe-todo:02240347", "A2/todo-app/frontend")
+                    docker.withRegistry('https://registry.hub.docker.com', 'Docker-hub-creds') {
+                        image.push()
                     }
                 }
             }
